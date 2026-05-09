@@ -840,18 +840,6 @@
             margin-bottom: 28px;
         }
 
-        .player-name-input {
-            width: 110px;
-            max-width: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.18);
-            border-radius: 6px;
-            padding: 7px 8px;
-            font: inherit;
-            font-weight: 700;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.92);
-        }
-
         .rank-column {
             min-width: 58px;
             font-weight: 700;
@@ -898,10 +886,6 @@
         @media (max-width: 640px) {
             .final-match {
                 grid-template-columns: 1fr;
-            }
-
-            .player-name-input {
-                width: 92px;
             }
 
             .champion-display {

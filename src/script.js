@@ -1,24 +1,149 @@
 // 10人2ブロック制の予想ツール本体。
+console.log('[players-debug] script.js loaded', {
+    version: 'a-block-players-debug-20260509-1',
+    href: window.location.href
+});
+
 const blockDefinitions = [
     {
         id: 'block-a',
         title: 'Aブロック',
         className: 'red-title',
-        players: Array.from({ length: 10 }, (_, index) => ({ id: `a${index + 1}`, name: `A-${index + 1}` }))
+        players: [
+            { id: 'a1', name: '田口隆祐' },
+            { id: 'a2', name: 'マスター・ワト' },
+            { id: 'a3', name: 'バリエンテJr.' },
+            { id: 'a4', name: 'ティタン' },
+            { id: 'a5', name: 'ロビー・エックス' },
+            { id: 'a6', name: '藤田晃生' },
+            { id: 'a7', name: 'フランシスコ・アキラ' },
+            { id: 'a8', name: '永井大貴' },
+            { id: 'a9', name: 'ニック・ウェイン' },
+            { id: 'a10', name: '葛西純' }
+        ]
     },
     {
         id: 'block-b',
         title: 'Bブロック',
         className: 'blue-title',
-        players: Array.from({ length: 10 }, (_, index) => ({ id: `b${index + 1}`, name: `B-${index + 1}` }))
+        players: [
+            { id: 'b1', name: 'エル・デスペラード' },
+            { id: 'b2', name: 'KUSHIDA' },
+            { id: 'b3', name: 'YOH' },
+            { id: 'b4', name: '石森太二' },
+            { id: 'b5', name: 'ロビー・イーグルス' },
+            { id: 'b6', name: 'ジェイコブ・オースティン・ヤング' },
+            { id: 'b7', name: 'SHO' },
+            { id: 'b8', name: '金丸義信' },
+            { id: 'b9', name: '豹' },
+            { id: 'b10', name: '佐々木大輔' }
+        ]
     }
 ];
+
+const matchSchedules = {
+    'block-a-a1-a2': { date: '5.16', venue: '八王子' },
+    'block-a-a1-a3': { date: '5.17', venue: '代々木' },
+    'block-a-a1-a4': { date: '5.22', venue: '大阪' },
+    'block-a-a1-a5': { date: '5.29', venue: '燕' },
+    'block-a-a1-a6': { date: '5.24', venue: '京都' },
+    'block-a-a1-a7': { date: '6.2', venue: '後楽園' },
+    'block-a-a1-a8': { date: '5.14', venue: '後楽園' },
+    'block-a-a1-a9': { date: '5.20', venue: '後楽園' },
+    'block-a-a1-a10': { date: '6.3', venue: '後楽園' },
+    'block-a-a2-a3': { date: '5.24', venue: '京都' },
+    'block-a-a2-a4': { date: '5.14', venue: '後楽園' },
+    'block-a-a2-a5': { date: '5.17', venue: '代々木' },
+    'block-a-a2-a6': { date: '5.22', venue: '大阪' },
+    'block-a-a2-a7': { date: '5.20', venue: '後楽園' },
+    'block-a-a2-a8': { date: '5.29', venue: '燕' },
+    'block-a-a2-a9': { date: '6.3', venue: '後楽園' },
+    'block-a-a2-a10': { date: '6.2', venue: '後楽園' },
+    'block-a-a3-a4': { date: '5.20', venue: '後楽園' },
+    'block-a-a3-a5': { date: '6.3', venue: '後楽園' },
+    'block-a-a3-a6': { date: '5.29', venue: '燕' },
+    'block-a-a3-a7': { date: '5.22', venue: '大阪' },
+    'block-a-a3-a8': { date: '5.16', venue: '八王子' },
+    'block-a-a3-a9': { date: '6.2', venue: '後楽園' },
+    'block-a-a3-a10': { date: '5.23', venue: '姫路' },
+    'block-a-a4-a5': { date: '5.24', venue: '京都' },
+    'block-a-a4-a6': { date: '6.2', venue: '後楽園' },
+    'block-a-a4-a7': { date: '6.3', venue: '後楽園' },
+    'block-a-a4-a8': { date: '5.17', venue: '代々木' },
+    'block-a-a4-a9': { date: '5.29', venue: '燕' },
+    'block-a-a4-a10': { date: '5.16', venue: '八王子' },
+    'block-a-a5-a6': { date: '5.20', venue: '後楽園' },
+    'block-a-a5-a7': { date: '5.16', venue: '八王子' },
+    'block-a-a5-a8': { date: '6.2', venue: '後楽園' },
+    'block-a-a5-a9': { date: '5.14', venue: '後楽園' },
+    'block-a-a5-a10': { date: '5.22', venue: '大阪' },
+    'block-a-a6-a7': { date: '5.14', venue: '後楽園' },
+    'block-a-a6-a8': { date: '6.3', venue: '後楽園' },
+    'block-a-a6-a9': { date: '5.16', venue: '八王子' },
+    'block-a-a6-a10': { date: '5.17', venue: '代々木' },
+    'block-a-a7-a8': { date: '5.24', venue: '京都' },
+    'block-a-a7-a9': { date: '5.17', venue: '代々木' },
+    'block-a-a7-a10': { date: '5.27', venue: '沼津' },
+    'block-a-a8-a9': { date: '5.22', venue: '大阪' },
+    'block-a-a8-a10': { date: '5.20', venue: '後楽園' },
+    'block-a-a9-a10': { date: '5.24', venue: '京都' },
+    'block-b-b1-b2': { date: '5.30', venue: '高岡' },
+    'block-b-b1-b3': { date: '6.2', venue: '後楽園' },
+    'block-b-b1-b4': { date: '5.16', venue: '八王子' },
+    'block-b-b1-b5': { date: '5.17', venue: '代々木' },
+    'block-b-b1-b6': { date: '5.27', venue: '沼津' },
+    'block-b-b1-b7': { date: '5.23', venue: '姫路' },
+    'block-b-b1-b8': { date: '6.3', venue: '後楽園' },
+    'block-b-b1-b9': { date: '5.20', venue: '後楽園' },
+    'block-b-b1-b10': { date: '5.14', venue: '後楽園' },
+    'block-b-b2-b3': { date: '5.27', venue: '沼津' },
+    'block-b-b2-b4': { date: '6.3', venue: '後楽園' },
+    'block-b-b2-b5': { date: '5.14', venue: '後楽園' },
+    'block-b-b2-b6': { date: '5.20', venue: '後楽園' },
+    'block-b-b2-b7': { date: '5.17', venue: '代々木' },
+    'block-b-b2-b8': { date: '6.2', venue: '後楽園' },
+    'block-b-b2-b9': { date: '5.23', venue: '姫路' },
+    'block-b-b2-b10': { date: '5.16', venue: '八王子' },
+    'block-b-b3-b4': { date: '5.17', venue: '代々木' },
+    'block-b-b3-b5': { date: '5.23', venue: '姫路' },
+    'block-b-b3-b6': { date: '5.16', venue: '八王子' },
+    'block-b-b3-b7': { date: '5.20', venue: '後楽園' },
+    'block-b-b3-b8': { date: '5.30', venue: '高岡' },
+    'block-b-b3-b9': { date: '5.14', venue: '後楽園' },
+    'block-b-b3-b10': { date: '6.3', venue: '後楽園' },
+    'block-b-b4-b5': { date: '5.27', venue: '沼津' },
+    'block-b-b4-b6': { date: '5.14', venue: '後楽園' },
+    'block-b-b4-b7': { date: '5.30', venue: '高岡' },
+    'block-b-b4-b8': { date: '5.23', venue: '姫路' },
+    'block-b-b4-b9': { date: '6.2', venue: '後楽園' },
+    'block-b-b4-b10': { date: '5.20', venue: '後楽園' },
+    'block-b-b5-b6': { date: '6.2', venue: '後楽園' },
+    'block-b-b5-b7': { date: '5.16', venue: '八王子' },
+    'block-b-b5-b8': { date: '5.20', venue: '後楽園' },
+    'block-b-b5-b9': { date: '6.3', venue: '後楽園' },
+    'block-b-b5-b10': { date: '5.30', venue: '高岡' },
+    'block-b-b6-b7': { date: '6.3', venue: '後楽園' },
+    'block-b-b6-b8': { date: '5.17', venue: '代々木' },
+    'block-b-b6-b9': { date: '5.30', venue: '高岡' },
+    'block-b-b6-b10': { date: '5.23', venue: '姫路' },
+    'block-b-b7-b8': { date: '5.14', venue: '後楽園' },
+    'block-b-b7-b9': { date: '5.27', venue: '沼津' },
+    'block-b-b7-b10': { date: '6.2', venue: '後楽園' },
+    'block-b-b8-b9': { date: '5.29', venue: '燕' },
+    'block-b-b8-b10': { date: '5.27', venue: '沼津' },
+    'block-b-b9-b10': { date: '5.17', venue: '代々木' }
+};
 
 const blocks = blockDefinitions.map(block => block.id);
 let confirmedResults = {};
 let predictedResults = {};
 let matchResults = {};
 let finalResult = null;
+const DEBUG_PLAYERS = true;
+
+function debugPlayers(...args) {
+    if (DEBUG_PLAYERS) console.log('[players-debug]', ...args);
+}
 
 function getBlock(blockId) {
     return blockDefinitions.find(block => block.id === blockId);
@@ -36,6 +161,12 @@ function getReverseKey(blockId, player1Id, player2Id) {
     return `${blockId}-${player2Id}-${player1Id}`;
 }
 
+function getScheduleInfo(blockId, player1Id, player2Id) {
+    return matchSchedules[getMatchKey(blockId, player1Id, player2Id)]
+        || matchSchedules[getReverseKey(blockId, player1Id, player2Id)]
+        || null;
+}
+
 function getResultIcon(result) {
     switch (result) {
         case 'win': return '<i class="fa-regular fa-circle"></i>';
@@ -51,14 +182,22 @@ function mergeResults() {
 
 async function loadConfirmedResults() {
     try {
+        debugPlayers('result.json の読み込みを開始');
         const response = await fetch('result.json', { cache: 'no-store' });
+        debugPlayers('result.json response', {
+            ok: response.ok,
+            status: response.status,
+            url: response.url
+        });
         if (!response.ok) return;
 
         const data = await response.json();
+        debugPlayers('result.json players.block-a', data.players?.['block-a']);
         applyImportedPlayers(data.players);
         confirmedResults = normalizeImportedData(data.confirmed || data.results || data);
         finalResult = data.finalResult || finalResult;
         mergeResults();
+        debugPlayers('result.json 適用後の Aブロック選手', getBlock('block-a').players);
     } catch (error) {
         console.log('result.jsonの読み込みに失敗しました:', error.message);
     }
@@ -71,9 +210,33 @@ function applyImportedPlayers(playersByBlock) {
         const importedPlayers = playersByBlock[block.id] || [];
         importedPlayers.forEach(importedPlayer => {
             const player = getPlayer(block.id, importedPlayer.id);
-            if (player && importedPlayer.name) player.name = importedPlayer.name;
+            if (player && importedPlayer.name && !isPlaceholderPlayerName(importedPlayer.name)) {
+                debugPlayers('選手名を result.json から反映', {
+                    block: block.id,
+                    id: importedPlayer.id,
+                    before: player.name,
+                    after: importedPlayer.name
+                });
+                player.name = importedPlayer.name;
+            } else if (player && importedPlayer.name) {
+                debugPlayers('プレースホルダー名のため上書きをスキップ', {
+                    block: block.id,
+                    id: importedPlayer.id,
+                    current: player.name,
+                    imported: importedPlayer.name
+                });
+            } else {
+                debugPlayers('選手名を反映できませんでした', {
+                    block: block.id,
+                    importedPlayer
+                });
+            }
         });
     });
+}
+
+function isPlaceholderPlayerName(name) {
+    return /^[AB]-\d+$/.test(name);
 }
 
 function normalizeImportedData(data) {
@@ -85,6 +248,10 @@ function normalizeImportedData(data) {
 
 function renderTabs() {
     const tabs = document.getElementById('tabs');
+    debugPlayers('タブ描画', blockDefinitions.map(block => ({
+        id: block.id,
+        title: block.title
+    })));
     tabs.innerHTML = blockDefinitions.map((block, index) =>
         `<button class="tab ${index === 0 ? 'active' : ''}" data-block="${block.id}">${block.title}</button>`
     ).join('');
@@ -92,6 +259,9 @@ function renderTabs() {
 
 function renderBlocks() {
     const root = document.getElementById('blocks-root');
+    debugPlayers('ブロック描画直前の選手一覧', Object.fromEntries(
+        blockDefinitions.map(block => [block.id, block.players.map(player => player.name)])
+    ));
     root.innerHTML = blockDefinitions.map(block => `
         <div id="${block.id}" class="content">
             <div class="block-title ${block.className}">${block.title}</div>
@@ -100,8 +270,8 @@ function renderBlocks() {
                 <table class="schedule-table">
                     <thead>
                         <tr>
-                            <th>選手</th>
-                            ${block.players.map(player => `<th data-player-id="${player.id}">${player.name}</th>`).join('')}
+                            <th class="${getBlockColorClass(block.id, 'header')}">選手</th>
+                            ${block.players.map(player => `<th class="${getBlockColorClass(block.id, 'header')}" data-player-id="${player.id}">${player.name}</th>`).join('')}
                             <th class="point-column">勝点</th>
                             <th class="rank-column">順位</th>
                         </tr>
@@ -109,9 +279,7 @@ function renderBlocks() {
                     <tbody>
                         ${block.players.map(rowPlayer => `
                             <tr>
-                                <td class="player-name">
-                                    <input class="player-name-input" data-block="${block.id}" data-player-id="${rowPlayer.id}" value="${rowPlayer.name}" aria-label="${rowPlayer.name}">
-                                </td>
+                                <td class="player-name ${getBlockColorClass(block.id, 'player')}" data-player-id="${rowPlayer.id}">${rowPlayer.name}</td>
                                 ${block.players.map(colPlayer => renderMatchCell(block.id, rowPlayer.id, colPlayer.id)).join('')}
                                 <td class="point-column" data-player-id="${rowPlayer.id}">
                                     <span class="confirmed-points">0</span>(<span class="predicted-points">0</span>)
@@ -126,13 +294,24 @@ function renderBlocks() {
     `).join('');
 }
 
+function getBlockColorClass(blockId, area) {
+    const color = blockId === 'block-a' ? 'red' : 'blue';
+    return area === 'header' ? `${color}-header` : `${color}-player`;
+}
+
 function renderMatchCell(blockId, rowPlayerId, colPlayerId) {
     if (rowPlayerId === colPlayerId) {
         return '<td class="diagonal">-</td>';
     }
 
+    const schedule = getScheduleInfo(blockId, rowPlayerId, colPlayerId);
+    const scheduleMarkup = schedule
+        ? `<div class="date">${schedule.date}</div><div class="venue">${schedule.venue}</div>`
+        : '';
+
     return `
         <td class="match-info clickable-cell" data-block="${blockId}" data-player1="${rowPlayerId}" data-player2="${colPlayerId}">
+            ${scheduleMarkup}
             <div class="match-results">
                 <div class="confirmed-result"></div>
                 <div class="predicted-result"></div>
@@ -152,11 +331,6 @@ function bindEvents() {
 
     document.querySelectorAll('.clickable-cell').forEach(cell => {
         cell.addEventListener('click', () => toggleMatchResult(cell));
-    });
-
-    document.querySelectorAll('.player-name-input').forEach(input => {
-        input.addEventListener('change', () => updatePlayerName(input));
-        input.addEventListener('click', event => event.stopPropagation());
     });
 
     document.querySelectorAll('thead th[data-player-id]').forEach(header => {
@@ -277,6 +451,9 @@ function updatePlayerName(input) {
     document.querySelectorAll(`#${input.dataset.block} th[data-player-id="${input.dataset.playerId}"]`).forEach(header => {
         header.textContent = player.name;
     });
+    document.querySelectorAll(`#${input.dataset.block} td.player-name[data-player-id="${input.dataset.playerId}"]`).forEach(cell => {
+        cell.textContent = player.name;
+    });
     refreshAllTables();
 }
 
@@ -354,10 +531,13 @@ function showPlayerSchedule(blockId, playerId) {
             const key = getMatchKey(blockId, playerId, opponent.id);
             const confirmed = confirmedResults[key];
             const predicted = predictedResults[key];
+            const schedule = getScheduleInfo(blockId, playerId, opponent.id);
             return `
                 <tr>
                     <td>${block.title}</td>
                     <td>${opponent.name}</td>
+                    <td>${schedule ? schedule.date : '-'}</td>
+                    <td>${schedule ? schedule.venue : '-'}</td>
                     <td class="result-cell ${confirmed || ''}">${getResultIcon(confirmed)}</td>
                     <td class="result-cell ${predicted || ''}">${getResultIcon(predicted)}</td>
                 </tr>
@@ -367,7 +547,7 @@ function showPlayerSchedule(blockId, playerId) {
     document.getElementById('modal-player-name').textContent = `${player.name} の対戦予定`;
     document.getElementById('modal-schedule-body').innerHTML = `
         <table class="schedule-table modal-table">
-            <thead><tr><th>ブロック</th><th>相手</th><th>確定</th><th>予想</th></tr></thead>
+            <thead><tr><th>ブロック</th><th>相手</th><th>日付</th><th>会場</th><th>確定</th><th>予想</th></tr></thead>
             <tbody>${rows}</tbody>
         </table>
     `;
@@ -472,9 +652,14 @@ function uploadPredictions(event) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    debugPlayers('DOMContentLoaded 初期Aブロック選手', getBlock('block-a').players);
     await loadConfirmedResults();
     renderTabs();
     renderBlocks();
     bindEvents();
     refreshAllTables();
+    debugPlayers('初期描画完了', {
+        headerNames: [...document.querySelectorAll('#block-a thead th[data-player-id]')].map(header => header.textContent),
+        rowNames: [...document.querySelectorAll('#block-a td.player-name[data-player-id]')].map(cell => cell.textContent)
+    });
 });
