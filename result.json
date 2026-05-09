@@ -29,6 +29,11 @@
     ]
   },
   "confirmed": {},
+  "playoffResults": {
+    "semifinal1": null,
+    "semifinal2": null,
+    "final": null
+  },
   "finalResult": null,
   "totalMatches": 0
 }

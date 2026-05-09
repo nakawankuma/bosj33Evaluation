@@ -139,6 +139,7 @@ let confirmedResults = {};
 let predictedResults = {};
 let matchResults = {};
 let finalResult = null;
+let playoffResults = { semifinal1: null, semifinal2: null, final: null };
 const DEBUG_PLAYERS = true;
 
 function debugPlayers(...args) {
@@ -195,6 +196,7 @@ async function loadConfirmedResults() {
         debugPlayers('result.json players.block-a', data.players?.['block-a']);
         applyImportedPlayers(data.players);
         confirmedResults = normalizeImportedData(data.confirmed || data.results || data);
+        playoffResults = normalizePlayoffResults(data.playoffResults || data.tournamentResults);
         finalResult = data.finalResult || finalResult;
         mergeResults();
         debugPlayers('result.json 適用後の Aブロック選手', getBlock('block-a').players);
@@ -244,6 +246,14 @@ function normalizeImportedData(data) {
     return Object.fromEntries(
         Object.entries(data).filter(([, value]) => ['win', 'draw', 'lose'].includes(value))
     );
+}
+
+function normalizePlayoffResults(results) {
+    return {
+        semifinal1: ['player1', 'player2'].includes(results?.semifinal1) ? results.semifinal1 : null,
+        semifinal2: ['player1', 'player2'].includes(results?.semifinal2) ? results.semifinal2 : null,
+        final: ['player1', 'player2'].includes(results?.final) ? results.final : null
+    };
 }
 
 function renderTabs() {
@@ -344,7 +354,9 @@ function bindEvents() {
     document.getElementById('download-confirmed-btn').addEventListener('click', downloadConfirmed);
     document.getElementById('upload-btn').addEventListener('click', () => document.getElementById('upload-input').click());
     document.getElementById('upload-input').addEventListener('change', uploadPredictions);
-    document.getElementById('final-result-btn').addEventListener('click', toggleFinalResult);
+    document.getElementById('semifinal-1-result-btn').addEventListener('click', () => togglePlayoffResult('semifinal1'));
+    document.getElementById('semifinal-2-result-btn').addEventListener('click', () => togglePlayoffResult('semifinal2'));
+    document.getElementById('final-result-btn').addEventListener('click', () => togglePlayoffResult('final'));
 
     bindModal('schedule-modal');
     bindModal('help-modal');
@@ -554,26 +566,83 @@ function showPlayerSchedule(blockId, playerId) {
     document.getElementById('schedule-modal').style.display = 'flex';
 }
 
-function getBlockWinner(blockId) {
+function getBlockTopPlayers(blockId) {
     const rankedPlayers = rankPlayers(blockId);
     const totalMatches = getBlock(blockId).players.length - 1;
     if (!rankedPlayers.every(player => player.completedMatches === totalMatches)) return null;
-    return rankedPlayers[0];
+    return rankedPlayers;
 }
 
-function toggleFinalResult() {
-    if (!getBlockWinner('block-a') || !getBlockWinner('block-b')) return;
-    finalResult = finalResult === 'block-a' ? 'block-b' : 'block-a';
+function getPlayoffMatch(matchId) {
+    const aRanks = getBlockTopPlayers('block-a');
+    const bRanks = getBlockTopPlayers('block-b');
+
+    const semifinal1 = {
+        player1: aRanks?.[0] || null,
+        player2: bRanks?.[1] || null,
+        fallback1: 'Aブロック1位',
+        fallback2: 'Bブロック2位'
+    };
+    const semifinal2 = {
+        player1: bRanks?.[0] || null,
+        player2: aRanks?.[1] || null,
+        fallback1: 'Bブロック1位',
+        fallback2: 'Aブロック2位'
+    };
+
+    if (matchId === 'semifinal1') return semifinal1;
+    if (matchId === 'semifinal2') return semifinal2;
+
+    const semifinal1Winner = getPlayoffWinner('semifinal1');
+    const semifinal2Winner = getPlayoffWinner('semifinal2');
+    return {
+        player1: semifinal1Winner,
+        player2: semifinal2Winner,
+        fallback1: '準決勝1勝者',
+        fallback2: '準決勝2勝者'
+    };
+}
+
+function getPlayoffWinner(matchId) {
+    const match = getPlayoffMatch(matchId);
+    const result = playoffResults[matchId];
+    if (!match || !result) return null;
+    return result === 'player1' ? match.player1 : match.player2;
+}
+
+function togglePlayoffResult(matchId) {
+    const match = getPlayoffMatch(matchId);
+    if (!match?.player1 || !match?.player2) return;
+
+    playoffResults[matchId] = playoffResults[matchId] === 'player1' ? 'player2' : 'player1';
+    if (matchId === 'semifinal1' || matchId === 'semifinal2') {
+        playoffResults.final = null;
+    }
+    finalResult = getPlayoffWinner('final')?.id || null;
     updateFinalDisplay();
 }
 
 function updateFinalDisplay() {
-    const aWinner = getBlockWinner('block-a');
-    const bWinner = getBlockWinner('block-b');
-    document.getElementById('final-block-a-winner').textContent = aWinner ? aWinner.name : 'Aブロック1位';
-    document.getElementById('final-block-b-winner').textContent = bWinner ? bWinner.name : 'Bブロック1位';
+    updatePlayoffMatchDisplay('semifinal1', {
+        player1Id: 'semifinal-1-player-1',
+        player2Id: 'semifinal-1-player-2',
+        winnerId: 'semifinal-1-winner',
+        buttonId: 'semifinal-1-result-btn'
+    });
+    updatePlayoffMatchDisplay('semifinal2', {
+        player1Id: 'semifinal-2-player-1',
+        player2Id: 'semifinal-2-player-2',
+        winnerId: 'semifinal-2-winner',
+        buttonId: 'semifinal-2-result-btn'
+    });
+    updatePlayoffMatchDisplay('final', {
+        player1Id: 'final-player-1',
+        player2Id: 'final-player-2',
+        buttonId: 'final-result-btn'
+    });
 
-    const champion = finalResult === 'block-a' ? aWinner : finalResult === 'block-b' ? bWinner : null;
+    const champion = getPlayoffWinner('final');
+    finalResult = champion?.id || null;
     const display = document.getElementById('champion-display');
     if (champion) {
         display.style.display = 'block';
@@ -581,6 +650,24 @@ function updateFinalDisplay() {
     } else {
         display.style.display = 'none';
         display.textContent = '';
+    }
+}
+
+function updatePlayoffMatchDisplay(matchId, elements) {
+    const match = getPlayoffMatch(matchId);
+    const player1Element = document.getElementById(elements.player1Id);
+    const player2Element = document.getElementById(elements.player2Id);
+    const button = document.getElementById(elements.buttonId);
+    const winner = getPlayoffWinner(matchId);
+
+    player1Element.textContent = match?.player1?.name || match?.fallback1 || '-';
+    player2Element.textContent = match?.player2?.name || match?.fallback2 || '-';
+    player1Element.classList.toggle('selected-winner', !!match?.player1 && playoffResults[matchId] === 'player1');
+    player2Element.classList.toggle('selected-winner', !!match?.player2 && playoffResults[matchId] === 'player2');
+    button.disabled = !match?.player1 || !match?.player2;
+
+    if (elements.winnerId) {
+        document.getElementById(elements.winnerId).textContent = winner ? `勝者: ${winner.name}` : '勝者未選択';
     }
 }
 
@@ -594,6 +681,7 @@ function buildExportData(results) {
             block.players.map(player => ({ id: player.id, name: player.name }))
         ])),
         results,
+        playoffResults,
         finalResult
     };
 }
@@ -637,6 +725,7 @@ function uploadPredictions(event) {
                 bindEvents();
             }
             predictedResults = normalizeImportedData(data.results || data.confirmed || data);
+            playoffResults = normalizePlayoffResults(data.playoffResults || data.tournamentResults);
             finalResult = data.finalResult || null;
             mergeResults();
             refreshAllTables();

@@ -34,13 +34,36 @@
 
         <div class="tournament-section">
             <div class="tournament-header">
-                <div class="tournament-title">決勝戦</div>
-                <div class="tournament-subtitle">各ブロック1位による優勝予想</div>
+                <div class="tournament-title">決勝トーナメント</div>
+                <div class="tournament-subtitle">準決勝: A1位 vs B2位 / B1位 vs A2位</div>
             </div>
-            <div class="final-match">
-                <div class="final-player" id="final-block-a-winner">Aブロック1位</div>
-                <button id="final-result-btn" class="io-button">勝者を切替</button>
-                <div class="final-player" id="final-block-b-winner">Bブロック1位</div>
+            <div class="playoff-grid">
+                <div class="playoff-match">
+                    <div class="playoff-label">準決勝1</div>
+                    <div class="playoff-pairing">
+                        <div class="final-player" id="semifinal-1-player-1">Aブロック1位</div>
+                        <button id="semifinal-1-result-btn" class="io-button playoff-button">勝者を切替</button>
+                        <div class="final-player" id="semifinal-1-player-2">Bブロック2位</div>
+                    </div>
+                    <div class="playoff-winner" id="semifinal-1-winner">勝者未選択</div>
+                </div>
+                <div class="playoff-match">
+                    <div class="playoff-label">準決勝2</div>
+                    <div class="playoff-pairing">
+                        <div class="final-player" id="semifinal-2-player-1">Bブロック1位</div>
+                        <button id="semifinal-2-result-btn" class="io-button playoff-button">勝者を切替</button>
+                        <div class="final-player" id="semifinal-2-player-2">Aブロック2位</div>
+                    </div>
+                    <div class="playoff-winner" id="semifinal-2-winner">勝者未選択</div>
+                </div>
+            </div>
+            <div class="playoff-match final-playoff-match">
+                <div class="playoff-label">決勝</div>
+                <div class="playoff-pairing">
+                    <div class="final-player" id="final-player-1">準決勝1勝者</div>
+                    <button id="final-result-btn" class="io-button playoff-button">勝者を切替</button>
+                    <div class="final-player" id="final-player-2">準決勝2勝者</div>
+                </div>
             </div>
             <div id="champion-display" class="champion-display" style="display: none;"></div>
         </div>
