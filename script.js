@@ -568,8 +568,6 @@ function showPlayerSchedule(blockId, playerId) {
 
 function getBlockTopPlayers(blockId) {
     const rankedPlayers = rankPlayers(blockId);
-    const totalMatches = getBlock(blockId).players.length - 1;
-    if (!rankedPlayers.every(player => player.completedMatches === totalMatches)) return null;
     return rankedPlayers;
 }
 
@@ -612,13 +610,22 @@ function getPlayoffWinner(matchId) {
 
 function togglePlayoffResult(matchId) {
     const match = getPlayoffMatch(matchId);
-    if (!match?.player1 || !match?.player2) return;
+    if (!match?.player1 || !match?.player2) {
+        console.log('[playoff-debug] 勝者切替不可', { matchId, match });
+        return;
+    }
 
     playoffResults[matchId] = playoffResults[matchId] === 'player1' ? 'player2' : 'player1';
     if (matchId === 'semifinal1' || matchId === 'semifinal2') {
         playoffResults.final = null;
     }
     finalResult = getPlayoffWinner('final')?.id || null;
+    console.log('[playoff-debug] 勝者切替', {
+        matchId,
+        result: playoffResults[matchId],
+        winner: getPlayoffWinner(matchId)?.name,
+        playoffResults
+    });
     updateFinalDisplay();
 }
 
