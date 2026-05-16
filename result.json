@@ -1,7 +1,7 @@
 {
   "format": "two-block-10-player-prediction",
   "version": "2.0",
-  "lastUpdate": "2026-05-16T12:23:29.860Z",
+  "lastUpdate": "2026-05-16T13:14:29.695Z",
   "players": {
     "block-a": [
       {
@@ -89,6 +89,24 @@
     ]
   },
   "results": {
+    "block-a-a3-a8": "win",
+    "block-a-a8-a3": "lose",
+    "block-a-a2-a1": "lose",
+    "block-a-a1-a2": "win",
+    "block-b-b3-b6": "win",
+    "block-b-b6-b3": "lose",
+    "block-a-a5-a7": "win",
+    "block-a-a7-a5": "lose",
+    "block-b-b10-b2": "win",
+    "block-b-b2-b10": "lose",
+    "block-a-a4-a10": "win",
+    "block-a-a10-a4": "lose",
+    "block-b-b7-b5": "win",
+    "block-b-b5-b7": "lose",
+    "block-a-a6-a9": "win",
+    "block-a-a9-a6": "lose",
+    "block-b-b1-b4": "win",
+    "block-b-b4-b1": "lose",
     "block-a-a6-a7": "win",
     "block-a-a7-a6": "lose",
     "block-b-b6-b4": "lose",
@@ -113,6 +131,24 @@
   },
   "finalResult": null,
   "confirmed": {
+    "block-a-a3-a8": "win",
+    "block-a-a8-a3": "lose",
+    "block-a-a2-a1": "lose",
+    "block-a-a1-a2": "win",
+    "block-b-b3-b6": "win",
+    "block-b-b6-b3": "lose",
+    "block-a-a5-a7": "win",
+    "block-a-a7-a5": "lose",
+    "block-b-b10-b2": "win",
+    "block-b-b2-b10": "lose",
+    "block-a-a4-a10": "win",
+    "block-a-a10-a4": "lose",
+    "block-b-b7-b5": "win",
+    "block-b-b5-b7": "lose",
+    "block-a-a6-a9": "win",
+    "block-a-a9-a6": "lose",
+    "block-b-b1-b4": "win",
+    "block-b-b4-b1": "lose",
     "block-a-a6-a7": "win",
     "block-a-a7-a6": "lose",
     "block-b-b6-b4": "lose",
@@ -130,5 +166,5 @@
     "block-a-a4-a2": "win",
     "block-a-a2-a4": "lose"
   },
-  "totalMatches": 16
+  "totalMatches": 34
 }
