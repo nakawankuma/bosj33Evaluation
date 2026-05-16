@@ -440,17 +440,14 @@ function updateCellDisplay(cell) {
     if (confirmedResults[matchKey]) {
         confirmedResultDiv.innerHTML = getResultIcon(confirmedResults[matchKey]);
         confirmedResultDiv.className = `confirmed-result ${confirmedResults[matchKey]}`;
-        predictedResultDiv.innerHTML = '';
-        predictedResultDiv.className = 'predicted-result';
         cell.classList.add('confirmed-cell');
         cell.classList.remove('clickable-cell');
-        return;
+    } else {
+        confirmedResultDiv.innerHTML = '';
+        confirmedResultDiv.className = 'confirmed-result';
+        cell.classList.remove('confirmed-cell');
+        cell.classList.add('clickable-cell');
     }
-
-    confirmedResultDiv.innerHTML = '';
-    confirmedResultDiv.className = 'confirmed-result';
-    cell.classList.remove('confirmed-cell');
-    cell.classList.add('clickable-cell');
 
     const predictedResult = predictedResults[matchKey];
     predictedResultDiv.innerHTML = getResultIcon(predictedResult);
