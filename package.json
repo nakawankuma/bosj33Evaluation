@@ -1,7 +1,7 @@
 {
-  "name": "fivestar-gp-2025",
+  "name": "bosj33-2026-prediction-tool",
   "version": "1.0.0",
-  "description": "FIVESTAR GP 2025 Tournament Bracket System",
+  "description": "BOSJ33 2026 prediction tool",
   "main": "index.html",
   "scripts": {
     "start": "node server.js",
@@ -15,7 +15,7 @@
     "tournament",
     "bracket",
     "wrestling",
-    "fivestar-gp"
+    "bosj33"
   ],
   "author": "",
   "license": "MIT"
