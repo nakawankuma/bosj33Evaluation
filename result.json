@@ -1,7 +1,7 @@
 {
   "format": "two-block-10-player-prediction",
   "version": "2.0",
-  "lastUpdate": "2026-05-16T12:08:41.975Z",
+  "lastUpdate": "2026-05-16T12:23:29.860Z",
   "players": {
     "block-a": [
       {
@@ -89,6 +89,8 @@
     ]
   },
   "results": {
+    "block-a-a6-a7": "win",
+    "block-a-a7-a6": "lose",
     "block-b-b6-b4": "lose",
     "block-b-b4-b6": "win",
     "block-b-b7-b8": "win",
@@ -111,6 +113,8 @@
   },
   "finalResult": null,
   "confirmed": {
+    "block-a-a6-a7": "win",
+    "block-a-a7-a6": "lose",
     "block-b-b6-b4": "lose",
     "block-b-b4-b6": "win",
     "block-b-b7-b8": "win",
@@ -126,5 +130,5 @@
     "block-a-a4-a2": "win",
     "block-a-a2-a4": "lose"
   },
-  "totalMatches": 14
+  "totalMatches": 16
 }
