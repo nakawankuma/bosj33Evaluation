@@ -1,39 +1,130 @@
 {
   "format": "two-block-10-player-prediction",
   "version": "2.0",
-  "lastUpdate": "2026-05-09T00:00:00.000Z",
+  "lastUpdate": "2026-05-16T12:08:41.975Z",
   "players": {
     "block-a": [
-      { "id": "a1", "name": "田口隆祐" },
-      { "id": "a2", "name": "マスター・ワト" },
-      { "id": "a3", "name": "バリエンテJr." },
-      { "id": "a4", "name": "ティタン" },
-      { "id": "a5", "name": "ロビー・エックス" },
-      { "id": "a6", "name": "藤田晃生" },
-      { "id": "a7", "name": "フランシスコ・アキラ" },
-      { "id": "a8", "name": "永井大貴" },
-      { "id": "a9", "name": "ニック・ウェイン" },
-      { "id": "a10", "name": "葛西純" }
+      {
+        "id": "a1",
+        "name": "田口隆祐"
+      },
+      {
+        "id": "a2",
+        "name": "マスター・ワト"
+      },
+      {
+        "id": "a3",
+        "name": "バリエンテJr."
+      },
+      {
+        "id": "a4",
+        "name": "ティタン"
+      },
+      {
+        "id": "a5",
+        "name": "ロビー・エックス"
+      },
+      {
+        "id": "a6",
+        "name": "藤田晃生"
+      },
+      {
+        "id": "a7",
+        "name": "フランシスコ・アキラ"
+      },
+      {
+        "id": "a8",
+        "name": "永井大貴"
+      },
+      {
+        "id": "a9",
+        "name": "ニック・ウェイン"
+      },
+      {
+        "id": "a10",
+        "name": "葛西純"
+      }
     ],
     "block-b": [
-      { "id": "b1", "name": "エル・デスペラード" },
-      { "id": "b2", "name": "KUSHIDA" },
-      { "id": "b3", "name": "YOH" },
-      { "id": "b4", "name": "石森太二" },
-      { "id": "b5", "name": "ロビー・イーグルス" },
-      { "id": "b6", "name": "ジェイコブ・オースティン・ヤング" },
-      { "id": "b7", "name": "SHO" },
-      { "id": "b8", "name": "金丸義信" },
-      { "id": "b9", "name": "豹" },
-      { "id": "b10", "name": "佐々木大輔" }
+      {
+        "id": "b1",
+        "name": "エル・デスペラード"
+      },
+      {
+        "id": "b2",
+        "name": "KUSHIDA"
+      },
+      {
+        "id": "b3",
+        "name": "YOH"
+      },
+      {
+        "id": "b4",
+        "name": "石森太二"
+      },
+      {
+        "id": "b5",
+        "name": "ロビー・イーグルス"
+      },
+      {
+        "id": "b6",
+        "name": "ジェイコブ・オースティン・ヤング"
+      },
+      {
+        "id": "b7",
+        "name": "SHO"
+      },
+      {
+        "id": "b8",
+        "name": "金丸義信"
+      },
+      {
+        "id": "b9",
+        "name": "豹"
+      },
+      {
+        "id": "b10",
+        "name": "佐々木大輔"
+      }
     ]
   },
-  "confirmed": {},
+  "results": {
+    "block-b-b6-b4": "lose",
+    "block-b-b4-b6": "win",
+    "block-b-b7-b8": "win",
+    "block-b-b8-b7": "lose",
+    "block-a-a1-a8": "win",
+    "block-a-a8-a1": "lose",
+    "block-b-b9-b3": "win",
+    "block-b-b3-b9": "lose",
+    "block-a-a9-a5": "win",
+    "block-a-a5-a9": "lose",
+    "block-b-b2-b5": "win",
+    "block-b-b5-b2": "lose",
+    "block-a-a4-a2": "win",
+    "block-a-a2-a4": "lose"
+  },
   "playoffResults": {
     "semifinal1": null,
     "semifinal2": null,
     "final": null
   },
   "finalResult": null,
-  "totalMatches": 0
+  "confirmed": {
+    "block-b-b6-b4": "lose",
+    "block-b-b4-b6": "win",
+    "block-b-b7-b8": "win",
+    "block-b-b8-b7": "lose",
+    "block-a-a1-a8": "win",
+    "block-a-a8-a1": "lose",
+    "block-b-b9-b3": "win",
+    "block-b-b3-b9": "lose",
+    "block-a-a9-a5": "win",
+    "block-a-a5-a9": "lose",
+    "block-b-b2-b5": "win",
+    "block-b-b5-b2": "lose",
+    "block-a-a4-a2": "win",
+    "block-a-a2-a4": "lose"
+  },
+  "totalMatches": 14
 }
